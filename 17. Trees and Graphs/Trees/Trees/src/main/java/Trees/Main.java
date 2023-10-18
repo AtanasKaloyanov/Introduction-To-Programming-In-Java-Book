@@ -1,5 +1,6 @@
 package Trees;
 
+
 public class Main {
     public static void main(String[] args) {
         Tree<Integer> theTreeInFrontOfMyBlock =
@@ -14,9 +15,36 @@ public class Main {
                                 new Tree(6))
                 );
 
+//      recc(theTreeInFrontOfMyBlock.getRoot(), "  ");
         theTreeInFrontOfMyBlock.printDFS();
+
     }
+
+    private static void recc(Tree.TreeNode node, String s) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.println(s + node.getValue());
+
+        for (int i = 0; i < node.getChildrenCount(); i++) {
+            recc(node.getChild(i), s + "  ");
+        }
+    }
+
 }
+       /*
+       7
+         19
+             1
+             12
+             31
+         21
+         14
+             23
+             6
+        */
+
 
 //                     7
 
