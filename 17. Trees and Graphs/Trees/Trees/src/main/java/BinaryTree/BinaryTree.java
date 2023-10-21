@@ -89,5 +89,34 @@ public class BinaryTree<T> {
         return this.root.rightChild;
     }
 
-    
+    public void preOrder(BinaryTreeNode<T> root) {
+        if (root == null) {
+            return;
+        }
+
+        preOrder(root.getLeftChild());
+        System.out.print(root.value + " ");
+        preOrder(root.getRightChild());
+    }
+
+    public void inOrder(BinaryTreeNode<T> root) {
+        if (root == null) {
+            return;
+        }
+
+        System.out.print(root.value + " ");
+        inOrder(root.getLeftChild());
+        inOrder(root.getRightChild());
+    }
+
+    public void postOrder(BinaryTreeNode<T> root) {
+        if (root == null) {
+            return;
+        }
+
+        postOrder(root.getLeftChild());
+        postOrder(root.getRightChild());
+        System.out.print(root.value + " ");
+    }
+
 }
