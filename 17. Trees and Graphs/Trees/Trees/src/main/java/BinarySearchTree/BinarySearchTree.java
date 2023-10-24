@@ -1,6 +1,5 @@
 package BinarySearchTree;
 
-import BinaryTree.BinaryTree;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
@@ -38,6 +37,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         public int compareTo(BinaryTreeNode<T> other) {
             return this.value.compareTo(other.value);
         }
+
     }
 
     private BinaryTreeNode<T> root;
@@ -48,22 +48,22 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     private void insert(T value) {
         if (value == null) {
-            throw new IllegalArgumentException("Cannot insert an element with null value");
+            throw new IllegalArgumentException("Cannot insret null value");
         }
 
         this.root = insert(value, null, this.root);
     }
 
-    private BinaryTreeNode<T> insert(T value, BinaryTreeNode<T> parentNode, BinaryTreeNode<T> node) {
+    private BinaryTreeNode<T> insert(T value, BinaryTreeNode<T> parent, BinaryTreeNode<T> node) {
         if (node == null) {
-            this.root = node;
             node = new BinaryTreeNode<T>(value);
-            node.parent = parentNode;
+            node.parent = parent;
         } else {
-            int compareNumber = this.root.compareTo(node);
-            if (compareNumber < 0) {
+            int compareValue = new BinaryTreeNode<>(value).compareTo(node);
+
+            if (compareValue < 0) {
                 node.leftChild = insert(value, node, node.leftChild);
-            } else if (compareNumber > 0) {
+            } else if (compareValue > 0) {
                 node.rightChild = insert(value, node, node.rightChild);
             }
         }
