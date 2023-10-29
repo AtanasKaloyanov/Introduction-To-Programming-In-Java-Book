@@ -30,11 +30,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         this.size = 0;
     }
 
-    @Override
-    public V put(K key, V value) {
-        return null;
-    }
-
     public List<DictionaryEntry<K, V>> findChain(K key, boolean createIfMissing) {
         int index = key.hashCode();
         index = index % this.table.length;
@@ -43,6 +38,42 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         }
         return table[index];
     }
+
+    @Override
+    public V put(K key, V value) {
+        List<DictionaryEntry<K, V>> chain = findChain(key, true);
+        for (int i = 0; i < chain.size(); i++) {
+            DictionaryEntry<K, V> entry = chain.get(i);
+            if (entry.getKey().equals(key)) {
+                DictionaryEntry<K, V> newEntry = new DictionaryEntry<>();
+                chain.set(i, newEntry);
+                return entry.getValue();
+            }
+        }
+        chain.add(new DictionaryEntry<>(key, value));
+        if (size++ >= threshold) {
+            expand();
+        }
+        return null;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private void expand() {
+        int newCapacity = 2 * this.table.length;
+        List<DictionaryEntry<K, V>>[] oldTable = this.table;
+        this.table = new List[newCapacity];
+        this.threshold = (int) (newCapacity * this.loadFactor);
+        for (List<DictionaryEntry<K, V>> oldChain : oldTable) {
+            if (oldChain != null) {
+                for (DictionaryEntry<K, V> dictionaryEntry : oldChain) {
+                    List<DictionaryEntry<K, V>> chain = findChain(dictionaryEntry.getKey(), true);
+                    chain.add(dictionaryEntry);
+                }
+            }
+        }
+    }
+
     @Override
     public V get(K key) {
         List<DictionaryEntry<K, V>> chain = findChain(key, false);
@@ -53,8 +84,22 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
                 }
             }
         }
-
         return null;
+    }
+
+    @Override
+    public boolean remove(K key) {
+        List<DictionaryEntry<K, V>> entries = findChain(key, true);
+        if (entries != null) {
+            for (int i = 0; i < entries.size(); i++) {
+                DictionaryEntry<K, V> currentEntry = entries.get(i);
+                if (currentEntry.getKey().equals(key)) {
+                    entries.remove(i);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -64,6 +109,14 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     @Override
     public Iterator<DictionaryEntry<K, V>> iterator() {
-        return null;
+       List<DictionaryEntry<K, V>> entries = new ArrayList<>(this.table.length);
+       for (List<DictionaryEntry<K, V>> currentEntries : this.table) {
+           if (currentEntries != null) {
+               entries.addAll(currentEntries);
+           }
+       }
+       return entries.iterator();
     }
 }
+
+
