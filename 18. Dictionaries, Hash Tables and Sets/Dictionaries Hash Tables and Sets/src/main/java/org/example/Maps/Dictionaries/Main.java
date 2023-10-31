@@ -1,4 +1,4 @@
-package org.example.Dictionaries;
+package org.example.Maps.Dictionaries;
 
 import java.util.Arrays;
 import java.util.HashMap;

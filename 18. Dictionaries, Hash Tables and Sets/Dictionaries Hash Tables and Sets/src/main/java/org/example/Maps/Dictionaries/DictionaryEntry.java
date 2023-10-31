@@ -1,4 +1,4 @@
-package org.example.Dictionaries;
+package org.example.Maps.Dictionaries;
 
 public class DictionaryEntry<K, V> {
     private K key;

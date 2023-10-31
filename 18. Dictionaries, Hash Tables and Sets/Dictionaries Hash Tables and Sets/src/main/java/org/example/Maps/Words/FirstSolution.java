@@ -1,4 +1,4 @@
-package org.example.Words;
+package org.example.Maps.Words;
 
 import java.util.Map;
 import java.util.TreeMap;

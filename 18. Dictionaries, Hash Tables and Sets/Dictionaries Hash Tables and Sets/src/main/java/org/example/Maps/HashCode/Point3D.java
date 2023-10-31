@@ -1,4 +1,4 @@
-package org.example.HashCode;
+package org.example.Maps.HashCode;
 
 import java.util.Objects;
 
