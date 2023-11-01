@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String path = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\19. Data Structures - Comparison and Best Practices\\Data Structures - Comparison and Best Practices\\src\\main\\java\\org\\example\\Task3\\text.txt";
+        String path = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\19. Data Structures - Comparison and Best Practices\\Data Structures\\src\\main\\java\\org\\example\\Task3\\text.txt";
         File file = new File(path);
 
         FileInputStream fis = new FileInputStream(file);
