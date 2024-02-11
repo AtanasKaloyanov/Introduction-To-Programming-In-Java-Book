@@ -1,0 +1,4 @@
+word: a, count: 18
+word: b, count: 6
+word: c, count: 5
+word: d, count: 10
