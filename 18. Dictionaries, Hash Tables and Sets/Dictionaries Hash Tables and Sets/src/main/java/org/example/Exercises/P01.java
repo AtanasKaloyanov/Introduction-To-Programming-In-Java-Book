@@ -1,5 +1,6 @@
 package org.example.Exercises;
 
+
 import java.util.*;
 
 public class P01 {
@@ -16,15 +17,16 @@ public class P01 {
             numberMap.put(number, occurances + 1);
         }
 
-        Iterator<Integer> iterator = numbers.iterator();
+        numberMap.entrySet()
+                        .forEach( (entry) -> {
+                            int key = entry.getKey();
+                            int value = entry.getValue();
 
-        while (iterator.hasNext()) {
-            int current = iterator.next();
-            if (numberMap.get(current) % 2 != 0) {
-                iterator.remove();
-            }
-        }
+                            if (value % 2 != 0) {
+                                numbers.removeIf((element) -> element == key);
+                            }
+                        });
 
-        System.out.println(numbers.toString().replaceAll("[\\[\\]]", ""));
+        System.out.println(numbers.toString().replaceAll("[,\\[\\]]", ""));
     }
 }
