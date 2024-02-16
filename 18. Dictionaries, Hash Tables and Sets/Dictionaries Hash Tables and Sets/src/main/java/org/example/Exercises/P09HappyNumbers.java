@@ -10,31 +10,32 @@ public class P09HappyNumbers {
                 .toList();
 
         int luckyNumber = Integer.parseInt(scanner.nextLine());
-        Comparator<List<Integer>> comp = new Comparator<List<Integer>>() {
-            @Override
-            public int compare(List<Integer> o1, List<Integer> o2) {
-                return Integer.compare(o2.size(), o1.size());
+
+         List<List<Integer>> result = new ArrayList<>();
+
+        for (int i = 0; i < givenNumbers.size(); i++) {
+            List<Integer> list = new ArrayList<>();
+            for (int j = i; j < givenNumbers.size(); j++) {
+                int currentNumber = givenNumbers.get(j);
+                list.add(currentNumber);
+
+                int listSum = list.stream()
+                        .mapToInt((element) -> element.intValue())
+                        .sum();
+
+                if (listSum == luckyNumber) {
+                    result.add(list);
+                    list = new ArrayList<>(list);
+                }
             }
-        };
+        }
 
-        TreeSet<List<Integer>> result = new TreeSet<>(comp);
+        result.stream()
+                .sorted( (entry1, entry2) -> Integer.compare(entry2.size(), entry1.size()))
+                .limit(10)
+                .forEach( (entry) -> System.out.println(entry));
 
-          for (int i = 0; i < result.size(); i++) {
-              List<Integer> list = new ArrayList<>();
-              int currentNumber = givenNumbers.get(i);
-              list.add(currentNumber);
-              int sum = list.stream()
-                      .mapToInt((element) -> element.intValue())
-                      .sum();
 
-              if (sum == luckyNumber) {
-                  result.add(list);
-                  if (result.size() == 10) {
-                      break;
-                  }
-              }
-          }
-          
-        System.out.println(result);
+
     }
 }
