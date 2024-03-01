@@ -1,39 +1,50 @@
 package org.example.Task2;
 
+import org.example.PriorityQueue.Person;
+
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         String path = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\19. Data Structures - Comparison and Best Practices\\Data Structures\\src\\main\\java\\org\\example\\Task2\\file1.txt";
         File file = new File(path);
-        FileInputStream fis = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-        BufferedReader bf = new BufferedReader(isr);
-        String current;
+        Scanner scanner = null;
 
-        Map<String, List<Student>> map = new HashMap<>();
+        try {
+            scanner = new Scanner(file, StandardCharsets.UTF_8);
+            Map<String, Set<Student>> peopleByCourses = new HashMap<>();
 
-        while ((current = bf.readLine()) != null) {
-            String[] information = current.split("\\s*\\|\\s*");
-            String currentFirstName = information[0];
-            String currentLastName = information[1];
-            String currentCourse = information[2];
+            while (scanner.hasNextLine()) {
+                String[] personData = scanner.nextLine().split(" \\| ");
+                String firstName = personData[0];
+                String lastName = personData[1];
+                String course = personData[2];
+                Student student = new Student(firstName, lastName, course);
 
-            Student currentStudent = new Student(currentFirstName, currentLastName);
-            map.putIfAbsent(currentCourse, new ArrayList<>());
-            map.get(currentCourse).add(currentStudent);
+                peopleByCourses.putIfAbsent(course, new TreeSet<>());
+                Set<Student> students = peopleByCourses.get(course);
+                students.add(student);
+            }
+            printStudentsByCourse(peopleByCourses);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
         }
+    }
 
-        map.entrySet().forEach((entry) -> {
-            String currentCourse = entry.getKey();
-            List<Student> currentStudents = entry.getValue();
-            Collections.sort(currentStudents);
-
-            System.out.println("Course: " + currentCourse);
-            System.out.print("Students: ");
-            System.out.println(currentStudents.toString().replaceAll("[\\[\\]]", ""));
-            System.out.println();
-        });
+    private static void printStudentsByCourse(Map<String, Set<Student>> result) {
+        result.entrySet()
+                .stream()
+                .forEach( (entry) -> {
+                    String currentCourse = entry.getKey();
+                    Set<Student> currentStudents = entry.getValue();
+                    System.out.println("The students of the course " + currentCourse + " are:" +  System.lineSeparator()
+                            + currentStudents.toString().replaceAll("[\\[\\]]", ""));
+                });
     }
 }

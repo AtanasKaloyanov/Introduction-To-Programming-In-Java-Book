@@ -9,7 +9,6 @@ public class PhoneBookFinder {
     private final static String INFORMATION_PATH = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\19. Data Structures - Comparison and Best Practices\\Data Structures\\src\\main\\java\\org\\example\\Task4\\information.txt";
     private final static String QUERIES_PATH = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\19. Data Structures - Comparison and Best Practices\\Data Structures\\src\\main\\java\\org\\example\\Task4\\queries.txt";
 
-
     public static void main(String[] args) throws IOException {
         File file = new File(INFORMATION_PATH);
         Scanner scanner = new Scanner(file, StandardCharsets.UTF_8);
@@ -23,7 +22,6 @@ public class PhoneBookFinder {
             String[] nameInformation = personInformation[0].split("\\s++");
             String town = personInformation[1];
             String phoneNumber = personInformation[2];
-
 
             for (String currentName : nameInformation) {
                 // adding currentName as Key
