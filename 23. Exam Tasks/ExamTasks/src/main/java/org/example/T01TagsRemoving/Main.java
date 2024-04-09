@@ -1,9 +1,59 @@
 package org.example.T01TagsRemoving;
 
+import java.io.*;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-        /*
+    private static final String INPUT_NAME_PATH = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\23. Exam Tasks\\ExamTasks\\src\\main\\java\\org\\example\\T01TagsRemoving\\Problem1.html";
+    private static final String OUTPUT_NAME_PATH = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\23. Exam Tasks\\ExamTasks\\src\\main\\java\\org\\example\\T01TagsRemoving\\Result.txt";
+    private static final String CHARSET = "utf-8";
+
+    public static void main(String[] args) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(INPUT_NAME_PATH);
+        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, CHARSET);
+        PrintWriter printWriter = new PrintWriter(OUTPUT_NAME_PATH, CHARSET);
+
+        try {
+            int currentChar = inputStreamReader.read();
+            StringBuilder sb = new StringBuilder();
+            boolean inTag = false;
+            while (currentChar != -1) {
+                char curentCharAsChar = (char) currentChar;
+                if (curentCharAsChar == '<') {
+                    printing(sb, printWriter);
+                    sb.setLength(0);
+                    inTag = true;
+                } else if (curentCharAsChar == '>') {
+                    inTag = false;
+                } else {
+                    if (!inTag) {
+                        sb.append(curentCharAsChar);
+                    }
+                }
+
+                currentChar = inputStreamReader.read();
+            }
+        } finally {
+            fileInputStream.close();
+            inputStreamReader.close();
+            printWriter.close();
+        }
+
+    }
+
+    private static void printing(StringBuilder sb, PrintWriter printWriter) {
+        String text = sb.toString();
+        text = text.trim();
+        text = text.replaceAll("\n\\s++", "\n");
+
+        if (text.length() != 0) {
+            printWriter.println(text);
+        }
+
+    }
+
+}
+
+ /*
         Input 1:
 
         <html>
@@ -44,5 +94,3 @@ public class Main {
         bold
         text.
          */
-    }
-}
