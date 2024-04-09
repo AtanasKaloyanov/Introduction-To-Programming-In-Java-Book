@@ -1,80 +1,76 @@
 package org.example.T02Labyrinth;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.Scanner;
-import java.util.TreeSet;
 
 public class Main {
-    private static int n;
-    private static char[][] labyrinth;
-    private static int heroRow;
-    private static int heroColumn;
-    private static TreeSet<Integer> pathsSteps = new TreeSet<>();
-    private static int counter = -1;
+    private static final String INPUT_PATH = "D:\\Programming\\Projects\\Introduction to Programming With Java - Book\\23. Exam Tasks\\ExamTasks\\src\\main\\java\\org\\example\\T02Labyrinth\\input.txt";
+    private static char[][] maze;
+    private static Position heroPosition;
 
     public static void main(String[] args) {
-        // 1. Reading the rows (and columns because the matrix is a square),
-        //   initialisation and filling of the matrix. By the time of the
-        //   filling of the matrix the hero row and the hero column are found
-        Scanner scanner = new Scanner(System.in);
-        n = Integer.parseInt(scanner.nextLine());
-        labyrinth = new char[n][n];
+        Scanner scanner = null;
 
-        fillMatrix(scanner);
+        try {
+            // 1. Reading the input and initializing the maze
+            scanner = new Scanner(new File(INPUT_PATH));
+            int rowsAndColumn = Integer.parseInt(scanner.nextLine());
+            maze = new char[rowsAndColumn][rowsAndColumn];
+            fillingTheMaze(scanner, rowsAndColumn);
 
-        // 2. The hero moves in the labyrinth (by recursion to the left, up, right and down).
-        // He can move only on 0 square (the other square is x). When he receives 0 the square
-        // turns into '*' because the hero mustn't go back. And the counter increases by one.
-        // The hero must go out of the labyrinth (out of the matrix). This happens when:
-        // 1. the hero row becomes-1,
-        // 2. the hero row becomes equals to n,
-        // 3. the hero column becomes -1
-        // 4. the hero column becomes equals to n.
-        // In these cases a path is found. The counter will be added in the set.
-        // At the main method prints the shortest path
-        movingInTheLabyrinth(heroRow, heroColumn, counter);
+            // 2. Moving in the maze and finding the shortest way out
+            Queue<Position> positions = new ArrayDeque<>();
+            positions.add(heroPosition);
 
-        // 3/ Printing the last path. It is the shortest.
-        System.out.println(pathsSteps.last());
-    }
-
-    private static void movingInTheLabyrinth(int heroRow, int heroColumn, int counter) {
-        counter++;
-
-        if (heroColumn == 0 || heroRow == 0 || heroColumn == n - 1 || heroRow == n - 1) {
-            counter++;
-            pathsSteps.add(counter);
-            return;
-        }
-
-        labyrinth[heroRow][heroColumn] = '*';
-
-        if (labyrinth[heroRow][heroColumn - 1] == '0') {
-            movingInTheLabyrinth(heroRow, heroColumn - 1, counter);
-        }
-        if (labyrinth[heroRow - 1][heroColumn] == '0') {
-            movingInTheLabyrinth(heroRow - 1, heroColumn, counter);
-        }
-        if (labyrinth[heroRow][heroColumn + 1] == '0') {
-            movingInTheLabyrinth(heroRow, heroColumn + 1, counter);
-        }
-        if (labyrinth[heroRow + 1][heroColumn] == '0') {
-            movingInTheLabyrinth(heroRow + 1, heroColumn, counter);
-        }
-
-    }
-
-    private static void fillMatrix(Scanner scanner) {
-        for (int i = 0; i < n; i++) {
-            char[] positions = scanner.nextLine().toCharArray();
-            for (int j = 0; j < n; j++) {
-                char currentPosition = positions[j];
-                if (currentPosition == '*') {
-                    heroRow = i;
-                    heroColumn = j;
+            while (!positions.isEmpty()) {
+                Position currentPosition = positions.remove();
+                int currentRow = currentPosition.getRow();
+                int currentColumn = currentPosition.getColumn();
+                int currentDistance = currentPosition.getDistance();
+                if (currentColumn == 0 ||
+                        currentRow == 0 ||
+                        currentColumn == rowsAndColumn - 1 ||
+                        currentRow == rowsAndColumn - 1) {
+                    System.out.println(currentDistance + 1);
+                    return;
                 }
-                labyrinth[i][j] = currentPosition;
+
+                movingInTheMaze(currentRow, currentColumn - 1, currentDistance, positions);
+                movingInTheMaze(currentRow - 1, currentColumn, currentDistance, positions);
+                movingInTheMaze(currentRow, currentColumn + 1, currentDistance, positions);
+                movingInTheMaze(currentRow + 1, currentColumn, currentDistance, positions);
+            }
+            System.out.println("The maze hasn't way out.");
+        } catch (IOException ioException) {
+            System.out.println(ioException.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+    }
+
+    private static void movingInTheMaze(int currentRow, int currentColumn, int currentDistance, Queue<Position> positions) {
+        if (maze[currentRow][currentColumn] == '0') {
+            maze[currentRow][currentColumn] = '*';
+            Position left = new Position(currentRow, currentColumn, currentDistance + 1);
+            positions.add(left);
+        }
+    }
+
+    private static void fillingTheMaze(Scanner scanner, int rowsAndColumn) {
+        for (int row = 0; row < rowsAndColumn; row++) {
+            String currentRow = scanner.nextLine();
+            char[] rowCharArray = currentRow.toCharArray();
+            for (int column = 0; column < rowsAndColumn; column++) {
+                char currentChar = rowCharArray[column];
+                if (currentChar == '*') {
+                    heroPosition = new Position(row, column, 0);
+                }
+                maze[row][column] = currentChar;
             }
         }
     }
