@@ -56,7 +56,7 @@ public class Main {
     private static void checkWord(StringBuilder sb) {
         String word = sb.toString().toLowerCase();
         words.keySet().forEach((key) -> {
-            if (word.startsWith(key.toLowerCase())) {
+            if (word.startsWith(key)) {
                 int wordsCount = words.get(key);
                 words.put(key, wordsCount + 1);
             }
@@ -74,7 +74,7 @@ public class Main {
 
     private static void addWordsToMap(Scanner scanner) {
         while (scanner.hasNextLine()) {
-            String currentLine = scanner.nextLine();
+            String currentLine = scanner.nextLine().toLowerCase();
             words.put(currentLine, 0);
         }
     }
