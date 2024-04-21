@@ -1,4 +1,4 @@
-package org.example.Exam3.Exercise;
+package org.example.Exam3.Exercise.P02CountingWords;
 
 import java.io.File;
 import java.io.IOException;

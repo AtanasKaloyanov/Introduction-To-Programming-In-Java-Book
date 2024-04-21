@@ -1,4 +1,4 @@
-package org.example.Exam3.Exercise;
+package org.example.Exam3.Exercise.P01SpiralMatrix;
 
 import java.util.Scanner;
 
