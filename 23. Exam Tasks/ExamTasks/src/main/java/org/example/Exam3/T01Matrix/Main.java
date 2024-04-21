@@ -76,7 +76,7 @@ public class Main {
     private static void resultPrinting(int dimensions) {
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
-                System.out.print(matrix[i][j] + "  ");
+                System.out.printf("%3d ", matrix[i][j]);
             }
             System.out.println();
         }
